@@ -156,10 +156,7 @@ public class DomicilioFiscalDAO implements GenericDAO<DomicilioFiscal> {
         df.setId(rs.getLong("id"));
         df.setEliminado(rs.getBoolean("eliminado"));
         df.setCalle(rs.getString("calle"));
-
-        int numero = rs.getInt("numero");
-        df.setNumero(rs.wasNull() ? null : numero);
-
+        df.setNumero(rs.getString("numero"));
         df.setCiudad(rs.getString("ciudad"));
         df.setProvincia(rs.getString("provincia"));
         df.setCodigoPostal(rs.getString("codigo_postal"));
