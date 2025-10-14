@@ -19,6 +19,15 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
     private static final String SELECT_BY_ID =
             "SELECT * FROM empresa WHERE id = ?";
 
+    private static final String SELECT_BY_CUIT =
+            "SELECT * FROM empresa WHERE cuit = ?";
+
+    private static final String SELECT_BY_RAZON_SOCIAL =
+            "SELECT * FROM empresa WHERE razon_social LIKE ?";
+
+    private static final String SELECT_BY_DOMICILIO_FISCAL =
+            "SELECT * FROM empresa WHERE domicilio_fiscal_id = ?";
+
     private static final String SELECT_ALL =
             "SELECT * FROM empresa WHERE eliminado = false";
 
@@ -52,6 +61,8 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
             entity.setDomicilioFiscal(nuevoDomicilio);
         }
 
+        verificarDomicilio(entity, connection);
+
         try (PreparedStatement stmt = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setBoolean(1, null != entity.getEliminado() ? entity.getEliminado() : false);
             stmt.setString(2, entity.getRazonSocial());
@@ -59,7 +70,6 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
             stmt.setString(4, entity.getActividadPrincipal());
             stmt.setString(5, entity.getEmail());
 
-            // Nos aseguramos que exista el domicilio antes de insertar
             if (null != entity.getDomicilioFiscal() && null != entity.getDomicilioFiscal().getId()) {
                 stmt.setLong(6, entity.getDomicilioFiscal().getId());
             } else {
@@ -140,6 +150,7 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
         // Si tiene domicilio fiscal, lo actualizamos o creamos
         if (entity.getDomicilioFiscal() != null) {
             if (entity.getDomicilioFiscal().getId() != null) {
+                verificarDomicilio(entity, connection);
                 domicilioFiscalDAO.actualizar(entity.getDomicilioFiscal(), connection);
             } else {
                 domicilioFiscalDAO.crear(entity.getDomicilioFiscal(), connection);
@@ -180,6 +191,65 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
         }
     }
 
+    public Empresa buscarPorDomicilioFiscal(long domicilioFiscalId) throws SQLException {
+        try (Connection conn = DatabaseConnection.conectarDB()) {
+            return buscarPorDomicilioFiscal(domicilioFiscalId, conn);
+        }
+    }
+
+    public Empresa buscarPorDomicilioFiscal(long domicilioFiscalId, Connection connection) throws SQLException {
+        try (PreparedStatement stmt = connection.prepareStatement(SELECT_BY_DOMICILIO_FISCAL)) {
+            stmt.setLong(1, domicilioFiscalId);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return desdeResultSet(rs, connection);
+                }
+            }
+        }
+        return null;
+    }
+
+    public Empresa buscarPorCuit(String cuit) throws SQLException {
+        try (Connection conn = DatabaseConnection.conectarDB()) {
+            return buscarPorCuit(cuit, conn);
+        }
+    }
+
+    public Empresa buscarPorCuit(String cuit, Connection connection) throws SQLException {
+        try (PreparedStatement stmt = connection.prepareStatement(SELECT_BY_CUIT)) {
+            stmt.setString(1, cuit);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return desdeResultSet(rs, connection);
+                }
+            }
+        }
+        return null;
+    }
+
+    public List<Empresa> buscarPorRazonSocial(String razonSocial) throws SQLException {
+        try (Connection conn = DatabaseConnection.conectarDB()) {
+            return buscarPorRazonSocial(razonSocial, conn);
+        }
+    }
+
+    public List<Empresa> buscarPorRazonSocial(String razonSocial, Connection connection) throws SQLException {
+        List<Empresa> empresas = new ArrayList<>();
+        String likeRazonSocial = "%" + razonSocial + "%";
+        try (PreparedStatement stmt = connection.prepareStatement(SELECT_BY_RAZON_SOCIAL)) {
+            stmt.setString(1, likeRazonSocial);
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    empresas.add(desdeResultSet(rs, connection));
+                }
+            }
+        }
+        return empresas;
+    }
+
     /**
      * Mapea un ResultSet a una entidad Empresa, incluyendo su DomicilioFiscal
      */
@@ -200,5 +270,24 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
         }
 
         return e;
+    }
+
+    /**
+     *  Nos aseguramos que exista el domicilio y que no haya sido asignado a otra empresa
+     */
+    private void verificarDomicilio(Empresa entity, Connection connection) throws SQLException {
+        var domicilioExistente = domicilioFiscalDAO.leer(entity.getDomicilioFiscal().getId(), connection);
+        if (null == domicilioExistente) {
+            throw new SQLException(
+                    "El domicilio fiscal con ID " + entity.getDomicilioFiscal().getId() +
+                            " no existe en la base de datos"
+            );
+        }
+        if (null != buscarPorDomicilioFiscal(domicilioExistente.getId(), connection)) {
+            throw new SQLException(
+                    "El domicilio fiscal con ID " + entity.getDomicilioFiscal().getId() +
+                            " ya está asignado a otra empresa"
+            );
+        }
     }
 }

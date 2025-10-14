@@ -5,6 +5,7 @@ import utn.programacion2.TPintegrador.dao.EmpresaDAO;
 import utn.programacion2.TPintegrador.entities.Empresa;
 
 import java.sql.Connection;
+import java.util.List;
 import java.util.regex.Pattern;
 
 public class EmpresaService extends AbstractService<Empresa> {
@@ -62,6 +63,34 @@ public class EmpresaService extends AbstractService<Empresa> {
             System.out.println("Error al actualizar empresa: " + e.getMessage());
         }
         return null;
+    }
+
+    public Empresa buscarPorCuit(String cuit) {
+        try {
+            var empresa = empresaDAO.buscarPorCuit(cuit);
+            if (null == empresa) {
+                System.out.println("Empresa con cuit '"+cuit+"' no existente");
+            } else {
+                return empresa;
+            }
+        } catch (Exception e) {
+            System.out.println("Error al buscar empresa por CUIT: " + e.getMessage());
+        }
+        return null;
+    }
+
+    public List<Empresa> buscarPorRazonSocial(String razonSocial) {
+        try {
+            var empresas = empresaDAO.buscarPorRazonSocial(razonSocial);
+            if (null == empresas || empresas.isEmpty()) {
+                System.out.println("No se encontraron empresas con la razón social: " + razonSocial);
+            } else {
+                return empresas;
+            }
+        } catch (Exception e) {
+            System.out.println("Error al buscar empresas por razón social: " + e.getMessage());
+        }
+        return List.of();
     }
 
     private void validarDatos(Empresa e) {

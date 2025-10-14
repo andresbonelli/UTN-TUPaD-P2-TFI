@@ -1,5 +1,7 @@
 package utn.programacion2.TPintegrador.dao;
 
+import utn.programacion2.TPintegrador.entities.Empresa;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
