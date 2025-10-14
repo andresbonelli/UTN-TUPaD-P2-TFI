@@ -42,23 +42,23 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
 
     @Override
     public Empresa crear(Empresa entity, Connection connection) throws SQLException {
-        if (entity == null) {
+        if (null == entity) {
             throw new IllegalArgumentException("La entidad no puede ser null");
         }
 
         // Si tiene domicilio fiscal y no tiene ID, lo creamos primero
-        if (entity.getDomicilioFiscal() != null && entity.getDomicilioFiscal().getId() == null) {
+        if (null != entity.getDomicilioFiscal() && null != entity.getDomicilioFiscal().getId()) {
             domicilioFiscalDAO.crear(entity.getDomicilioFiscal(), connection);
         }
 
         try (PreparedStatement stmt = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setBoolean(1, entity.getEliminado() != null ? entity.getEliminado() : false);
+            stmt.setBoolean(1, null != entity.getEliminado() ? entity.getEliminado() : false);
             stmt.setString(2, entity.getRazonSocial());
             stmt.setString(3, entity.getCuit());
             stmt.setString(4, entity.getActividadPrincipal());
             stmt.setString(5, entity.getEmail());
 
-            if (entity.getDomicilioFiscal() != null && entity.getDomicilioFiscal().getId() != null) {
+            if (null != entity.getDomicilioFiscal() && null != entity.getDomicilioFiscal().getId()) {
                 stmt.setLong(6, entity.getDomicilioFiscal().getId());
             } else {
                 stmt.setNull(6, Types.BIGINT);
@@ -94,7 +94,7 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    return mapResultSetToEntity(rs, connection);
+                    return desdeResultSet(rs, connection);
                 }
             }
         }
@@ -116,7 +116,7 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
              ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                empresas.add(mapResultSetToEntity(rs, connection));
+                empresas.add(desdeResultSet(rs, connection));
             }
         }
         return empresas;
@@ -131,7 +131,7 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
 
     @Override
     public boolean actualizar(Empresa entity, Connection connection) throws SQLException {
-        if (entity == null || entity.getId() == null) {
+        if (null == entity || null == entity.getId()) {
             throw new IllegalArgumentException("La entidad y su ID no pueden ser null");
         }
 
@@ -145,13 +145,13 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
         }
 
         try (PreparedStatement stmt = connection.prepareStatement(UPDATE)) {
-            stmt.setBoolean(1, entity.getEliminado() != null ? entity.getEliminado() : false);
+            stmt.setBoolean(1, null != entity.getEliminado() ? entity.getEliminado() : false);
             stmt.setString(2, entity.getRazonSocial());
             stmt.setString(3, entity.getCuit());
             stmt.setString(4, entity.getActividadPrincipal());
             stmt.setString(5, entity.getEmail());
 
-            if (entity.getDomicilioFiscal() != null && entity.getDomicilioFiscal().getId() != null) {
+            if (null != entity.getDomicilioFiscal() && null != entity.getDomicilioFiscal().getId()) {
                 stmt.setLong(6, entity.getDomicilioFiscal().getId());
             } else {
                 stmt.setNull(6, Types.BIGINT);
@@ -181,22 +181,22 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
     /**
      * Mapea un ResultSet a una entidad Empresa, incluyendo su DomicilioFiscal
      */
-    private Empresa mapResultSetToEntity(ResultSet rs, Connection connection) throws SQLException {
-        Empresa empresa = new Empresa();
-        empresa.setId(rs.getLong("id"));
-        empresa.setEliminado(rs.getBoolean("eliminado"));
-        empresa.setRazonSocial(rs.getString("razon_social"));
-        empresa.setCuit(rs.getString("cuit"));
-        empresa.setActividadPrincipal(rs.getString("actividad_principal"));
-        empresa.setEmail(rs.getString("email"));
+    private Empresa desdeResultSet(ResultSet rs, Connection connection) throws SQLException {
+        Empresa e = new Empresa();
+        e.setId(rs.getLong("id"));
+        e.setEliminado(rs.getBoolean("eliminado"));
+        e.setRazonSocial(rs.getString("razon_social"));
+        e.setCuit(rs.getString("cuit"));
+        e.setActividadPrincipal(rs.getString("actividad_principal"));
+        e.setEmail(rs.getString("email"));
 
         // Cargar el domicilio fiscal asociado
         long domicilioFiscalId = rs.getLong("domicilio_fiscal_id");
         if (!rs.wasNull()) {
             DomicilioFiscal domicilio = domicilioFiscalDAO.leer(domicilioFiscalId, connection);
-            empresa.setDomicilioFiscal(domicilio);
+            e.setDomicilioFiscal(domicilio);
         }
 
-        return empresa;
+        return e;
     }
 }

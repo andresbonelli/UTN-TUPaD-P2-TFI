@@ -35,12 +35,12 @@ public class DomicilioFiscalDAO implements GenericDAO<DomicilioFiscal> {
 
     @Override
     public DomicilioFiscal crear(DomicilioFiscal entity, Connection connection) throws SQLException {
-        if (entity == null) {
+        if (null == entity) {
             throw new IllegalArgumentException("La entidad no puede ser null");
         }
 
         try (PreparedStatement stmt = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setBoolean(1, entity.getEliminado() != null ? entity.getEliminado() : false);
+            stmt.setBoolean(1, null != entity.getEliminado() ? entity.getEliminado() : false);
             stmt.setString(2, entity.getCalle());
             stmt.setObject(3, entity.getNumero());
             stmt.setString(4, entity.getCiudad());
@@ -115,12 +115,12 @@ public class DomicilioFiscalDAO implements GenericDAO<DomicilioFiscal> {
 
     @Override
     public boolean actualizar(DomicilioFiscal entity, Connection connection) throws SQLException {
-        if (entity == null || entity.getId() == null) {
+        if (null == entity || null == entity.getId()) {
             throw new IllegalArgumentException("La entidad y su ID no pueden ser null");
         }
 
         try (PreparedStatement stmt = connection.prepareStatement(UPDATE)) {
-            stmt.setBoolean(1, entity.getEliminado() != null ? entity.getEliminado() : false);
+            stmt.setBoolean(1, null != entity.getEliminado() ? entity.getEliminado() : false);
             stmt.setString(2, entity.getCalle());
             stmt.setObject(3, entity.getNumero());
             stmt.setString(4, entity.getCiudad());
