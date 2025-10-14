@@ -8,7 +8,7 @@ public class DomicilioFiscal {
     private Long id;
     private Boolean eliminado;
     private String calle;
-    private Integer numero;
+    private String numero;
     private String ciudad;
     private String provincia;
     private String codigoPostal;
@@ -18,10 +18,20 @@ public class DomicilioFiscal {
         this.eliminado = false;
     }
 
-    public DomicilioFiscal(Long id, Boolean eliminado, String calle, Integer numero,
+    public DomicilioFiscal(Long id, Boolean eliminado, String calle, String numero,
                            String ciudad, String provincia, String codigoPostal, String pais) {
         this.id = id;
         this.eliminado = eliminado != null ? eliminado : false;
+        this.calle = calle;
+        this.numero = numero;
+        this.ciudad = ciudad;
+        this.provincia = provincia;
+        this.codigoPostal = codigoPostal;
+        this.pais = pais;
+    }
+    
+    public DomicilioFiscal(String calle, String numero, String ciudad, String provincia, String codigoPostal, String pais) {
+        this.eliminado = false;
         this.calle = calle;
         this.numero = numero;
         this.ciudad = ciudad;
@@ -54,11 +64,11 @@ public class DomicilioFiscal {
         this.calle = calle;
     }
 
-    public Integer getNumero() {
+    public String getNumero() {
         return numero;
     }
 
-    public void setNumero(Integer numero) {
+    public void setNumero(String numero) {
         this.numero = numero;
     }
 

@@ -46,9 +46,10 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
             throw new IllegalArgumentException("La entidad no puede ser null");
         }
 
-        // Si tiene domicilio fiscal y no tiene ID, lo creamos primero
-        if (null != entity.getDomicilioFiscal() && null != entity.getDomicilioFiscal().getId()) {
-            domicilioFiscalDAO.crear(entity.getDomicilioFiscal(), connection);
+        // Si trae domicilio fiscal pero no tiene ID asociada, lo creamos primero
+        if (null != entity.getDomicilioFiscal() && null == entity.getDomicilioFiscal().getId()) {
+            var nuevoDomicilio = domicilioFiscalDAO.crear(entity.getDomicilioFiscal(), connection);
+            entity.setDomicilioFiscal(nuevoDomicilio);
         }
 
         try (PreparedStatement stmt = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
@@ -58,6 +59,7 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
             stmt.setString(4, entity.getActividadPrincipal());
             stmt.setString(5, entity.getEmail());
 
+            // Nos aseguramos que exista el domicilio antes de insertar
             if (null != entity.getDomicilioFiscal() && null != entity.getDomicilioFiscal().getId()) {
                 stmt.setLong(6, entity.getDomicilioFiscal().getId());
             } else {
