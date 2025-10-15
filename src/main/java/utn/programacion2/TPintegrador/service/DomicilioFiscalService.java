@@ -5,6 +5,7 @@ import utn.programacion2.TPintegrador.dao.DomicilioFiscalDAO;
 import utn.programacion2.TPintegrador.entities.DomicilioFiscal;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public class DomicilioFiscalService extends AbstractService<DomicilioFiscal> {
 
@@ -17,15 +18,15 @@ public class DomicilioFiscalService extends AbstractService<DomicilioFiscal> {
 
     @Override
     public DomicilioFiscal insertar(DomicilioFiscal domicilio)  {
-        validarDatos(domicilio);
         try (Connection conn = DatabaseConnection.conectarDB()) {
             conn.setAutoCommit(false);
             try {
-                DomicilioFiscal creada = domicilioFiscalDAO.crear(domicilio, conn);
+                DomicilioFiscal creada = insertar(domicilio, conn);
                 conn.commit();
                 return creada;
             } catch (Exception ex) {
                 conn.rollback();
+                throw ex;
             } finally {
                 conn.setAutoCommit(true);
             }
@@ -35,18 +36,23 @@ public class DomicilioFiscalService extends AbstractService<DomicilioFiscal> {
         return null;
     }
 
+    /**
+     * sobrecarga con conexion para usar desde Empresa Service
+     */
+    public DomicilioFiscal insertar(DomicilioFiscal domicilio, Connection conn) throws SQLException {
+        validarDatos(domicilio);
+        return domicilioFiscalDAO.crear(domicilio, conn);
+    }
+
     @Override
     public DomicilioFiscal actualizar(DomicilioFiscal domicilio) {
         if (domicilio == null || domicilio.getId() == null) {
             throw new IllegalArgumentException("El domicilio y su ID no pueden ser null");
         }
-
-        validarDatos(domicilio);
-
         try (Connection conn = DatabaseConnection.conectarDB()) {
             conn.setAutoCommit(false);
             try {
-                domicilioFiscalDAO.actualizar(domicilio, conn);
+                actualizar(domicilio, conn);
                 conn.commit();
                 return domicilio;
             } catch (Exception ex) {
@@ -62,6 +68,15 @@ public class DomicilioFiscalService extends AbstractService<DomicilioFiscal> {
     }
 
     /**
+     * sobrecarga con conexion para usar desde Empresa Service
+     */
+    public DomicilioFiscal actualizar(DomicilioFiscal domicilio, Connection conn) throws SQLException {
+        validarDatos(domicilio);
+        domicilioFiscalDAO.actualizar(domicilio, conn);
+        return domicilio;
+    }
+
+    /**
      * Realiza validaciones de negocio y formato sobre el domicilio.
      */
     private void validarDatos(DomicilioFiscal df)  {
@@ -69,18 +84,18 @@ public class DomicilioFiscalService extends AbstractService<DomicilioFiscal> {
             throw new IllegalArgumentException("El domicilio no puede ser null");
 
         if (null == df.getCalle() || df.getCalle().isBlank())
-            throw new IllegalArgumentException("La calle es obligatoria");
+            throw new IllegalArgumentException("La calle del domicilio es obligatoria");
 
         if (null == df.getCiudad() || df.getCiudad().isBlank())
-            throw new IllegalArgumentException("La ciudad es obligatoria");
+            throw new IllegalArgumentException("La ciudad del domicilio es obligatoria");
 
         if (null == df.getProvincia() || df.getProvincia().isBlank())
-            throw new IllegalArgumentException("La provincia es obligatoria");
+            throw new IllegalArgumentException("La provincia del domicilio es obligatoria");
 
         if (null == df.getPais() || df.getPais().isBlank())
-            throw new IllegalArgumentException("El país es obligatorio");
+            throw new IllegalArgumentException("El país del domicilio es obligatorio");
 
         if (null != df.getCodigoPostal() && df.getCodigoPostal().length() > 8)
-            throw new IllegalArgumentException("El código postal debe tener 8 caracteres como maximo");
+            throw new IllegalArgumentException("El código postal del domicilio debe tener 8 caracteres como maximo");
     }
 }
