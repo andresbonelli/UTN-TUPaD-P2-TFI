@@ -56,6 +56,14 @@ public class EmpresaService extends AbstractService<Empresa> {
             conn.setAutoCommit(false);
 
             try {
+                // Si tiene domicilio fiscal, lo actualizamos o creamos
+                if (empresa.getDomicilioFiscal() != null) {
+                    if (empresa.getDomicilioFiscal().getId() != null) {
+                        domicilioFiscalService.actualizar(empresa.getDomicilioFiscal(), conn);
+                    } else {
+                        domicilioFiscalService.insertar(empresa.getDomicilioFiscal(), conn);
+                    }
+                }
                 empresaDAO.actualizar(empresa, conn);
                 conn.commit();
                 return empresa;

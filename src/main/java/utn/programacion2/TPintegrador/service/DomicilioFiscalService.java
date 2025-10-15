@@ -49,13 +49,10 @@ public class DomicilioFiscalService extends AbstractService<DomicilioFiscal> {
         if (domicilio == null || domicilio.getId() == null) {
             throw new IllegalArgumentException("El domicilio y su ID no pueden ser null");
         }
-
-        validarDatos(domicilio);
-
         try (Connection conn = DatabaseConnection.conectarDB()) {
             conn.setAutoCommit(false);
             try {
-                domicilioFiscalDAO.actualizar(domicilio, conn);
+                actualizar(domicilio, conn);
                 conn.commit();
                 return domicilio;
             } catch (Exception ex) {
@@ -68,6 +65,15 @@ public class DomicilioFiscalService extends AbstractService<DomicilioFiscal> {
             System.out.println("Error al actualizar domicilio fiscal: " + e.getMessage());
         }
         return null;
+    }
+
+    /**
+     * sobrecarga con conexion para usar desde Empresa Service
+     */
+    public DomicilioFiscal actualizar(DomicilioFiscal domicilio, Connection conn) throws SQLException {
+        validarDatos(domicilio);
+        domicilioFiscalDAO.actualizar(domicilio, conn);
+        return domicilio;
     }
 
     /**

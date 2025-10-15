@@ -141,14 +141,9 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
             throw new IllegalArgumentException("La entidad y su ID no pueden ser null");
         }
 
-        // Si tiene domicilio fiscal, lo actualizamos o creamos
-        if (entity.getDomicilioFiscal() != null) {
-            if (entity.getDomicilioFiscal().getId() != null) {
-                verificarDomicilioExistente(entity, connection);
-                domicilioFiscalDAO.actualizar(entity.getDomicilioFiscal(), connection);
-            } else {
-                domicilioFiscalDAO.crear(entity.getDomicilioFiscal(), connection);
-            }
+        // Si actualizamos domicilio fiscal, comprobar que no pertenezca a otra empresa
+        if (null != entity.getDomicilioFiscal() && null != entity.getDomicilioFiscal().getId()) {
+            verificarDomicilioExistente(entity, connection);
         }
 
         try (PreparedStatement stmt = connection.prepareStatement(UPDATE)) {
