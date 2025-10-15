@@ -14,10 +14,12 @@ public class EmpresaService extends AbstractService<Empresa> {
             Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
 
     private final EmpresaDAO empresaDAO;
+    private final DomicilioFiscalService domicilioFiscalService;
 
     public EmpresaService() {
         super(new EmpresaDAO());
         empresaDAO = (EmpresaDAO) this.dao;
+        domicilioFiscalService = new DomicilioFiscalService();
     }
 
     @Override
@@ -25,8 +27,12 @@ public class EmpresaService extends AbstractService<Empresa> {
         try (Connection conn = DatabaseConnection.conectarDB()) {
             validarDatos(empresa);
             conn.setAutoCommit(false);
-
             try {
+                // Si trae domicilio fiscal pero no tiene ID asociada, lo creamos primero
+                if (null != empresa.getDomicilioFiscal() && null == empresa.getDomicilioFiscal().getId()) {
+                    var nuevoDomicilio = domicilioFiscalService.insertar(empresa.getDomicilioFiscal(), conn);
+                    empresa.setDomicilioFiscal(nuevoDomicilio);
+                }
                 var creada = empresaDAO.crear(empresa, conn);
                 conn.commit();
                 return creada;

@@ -55,13 +55,7 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
             throw new IllegalArgumentException("La entidad no puede ser null");
         }
 
-        // Si trae domicilio fiscal pero no tiene ID asociada, lo creamos primero
-        if (null != entity.getDomicilioFiscal() && null == entity.getDomicilioFiscal().getId()) {
-            var nuevoDomicilio = domicilioFiscalDAO.crear(entity.getDomicilioFiscal(), connection);
-            entity.setDomicilioFiscal(nuevoDomicilio);
-        }
-
-        verificarDomicilio(entity, connection);
+        verificarDomicilioExistente(entity, connection);
 
         try (PreparedStatement stmt = connection.prepareStatement(INSERT, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setBoolean(1, null != entity.getEliminado() ? entity.getEliminado() : false);
@@ -150,7 +144,7 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
         // Si tiene domicilio fiscal, lo actualizamos o creamos
         if (entity.getDomicilioFiscal() != null) {
             if (entity.getDomicilioFiscal().getId() != null) {
-                verificarDomicilio(entity, connection);
+                verificarDomicilioExistente(entity, connection);
                 domicilioFiscalDAO.actualizar(entity.getDomicilioFiscal(), connection);
             } else {
                 domicilioFiscalDAO.crear(entity.getDomicilioFiscal(), connection);
@@ -275,7 +269,7 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
     /**
      *  Nos aseguramos que exista el domicilio y que no haya sido asignado a otra empresa
      */
-    private void verificarDomicilio(Empresa entity, Connection connection) throws SQLException {
+    private void verificarDomicilioExistente(Empresa entity, Connection connection) throws SQLException {
         var domicilioExistente = domicilioFiscalDAO.leer(entity.getDomicilioFiscal().getId(), connection);
         if (null == domicilioExistente) {
             throw new SQLException(
