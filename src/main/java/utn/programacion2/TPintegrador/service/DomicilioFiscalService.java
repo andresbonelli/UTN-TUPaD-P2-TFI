@@ -4,9 +4,6 @@ import utn.programacion2.TPintegrador.config.DatabaseConnection;
 import utn.programacion2.TPintegrador.dao.DomicilioFiscalDAO;
 import utn.programacion2.TPintegrador.entities.DomicilioFiscal;
 
-import java.sql.SQLException;
-import java.util.List;
-
 import java.sql.Connection;
 
 public class DomicilioFiscalService extends AbstractService<DomicilioFiscal> {
@@ -18,9 +15,6 @@ public class DomicilioFiscalService extends AbstractService<DomicilioFiscal> {
         this.domicilioFiscalDAO = new DomicilioFiscalDAO();
     }
 
-    /**
-     * Inserta un nuevo domicilio fiscal manejando transacción y validaciones.
-     */
     @Override
     public DomicilioFiscal insertar(DomicilioFiscal domicilio)  {
         validarDatos(domicilio);
@@ -41,9 +35,6 @@ public class DomicilioFiscalService extends AbstractService<DomicilioFiscal> {
         return null;
     }
 
-    /**
-     * Actualiza un domicilio fiscal existente.
-     */
     @Override
     public DomicilioFiscal actualizar(DomicilioFiscal domicilio) {
         if (domicilio == null || domicilio.getId() == null) {
