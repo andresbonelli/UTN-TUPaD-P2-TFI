@@ -17,16 +17,16 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
                     "VALUES (?, ?, ?, ?, ?, ?)";
 
     private static final String SELECT_BY_ID =
-            "SELECT * FROM empresa WHERE id = ?";
+            "SELECT * FROM empresa WHERE id = ? AND eliminado = false";
 
     private static final String SELECT_BY_CUIT =
-            "SELECT * FROM empresa WHERE cuit = ?";
+            "SELECT * FROM empresa WHERE cuit = ? AND eliminado = false";
 
     private static final String SELECT_BY_RAZON_SOCIAL =
-            "SELECT * FROM empresa WHERE razon_social LIKE ?";
+            "SELECT * FROM empresa WHERE razon_social LIKE ? AND eliminado = false";
 
     private static final String SELECT_BY_DOMICILIO_FISCAL =
-            "SELECT * FROM empresa WHERE domicilio_fiscal_id = ?";
+            "SELECT * FROM empresa WHERE domicilio_fiscal_id = ? AND eliminado = false";
 
     private static final String SELECT_ALL =
             "SELECT * FROM empresa WHERE eliminado = false";

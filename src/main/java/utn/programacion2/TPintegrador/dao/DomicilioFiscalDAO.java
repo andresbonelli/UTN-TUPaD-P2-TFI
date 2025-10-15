@@ -14,7 +14,7 @@ public class DomicilioFiscalDAO implements GenericDAO<DomicilioFiscal> {
                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
     private static final String SELECT_BY_ID =
-            "SELECT * FROM domicilio_fiscal WHERE id = ?";
+            "SELECT * FROM domicilio_fiscal WHERE id = ? AND eliminado = false";
 
     private static final String SELECT_ALL =
             "SELECT * FROM domicilio_fiscal WHERE eliminado = false";
