@@ -61,7 +61,8 @@ public class EmpresaService extends AbstractService<Empresa> {
                     if (empresa.getDomicilioFiscal().getId() != null) {
                         domicilioFiscalService.actualizar(empresa.getDomicilioFiscal(), conn);
                     } else {
-                        domicilioFiscalService.insertar(empresa.getDomicilioFiscal(), conn);
+                        var nuevoDomicilio = domicilioFiscalService.insertar(empresa.getDomicilioFiscal(), conn);
+                        empresa.setDomicilioFiscal(nuevoDomicilio);
                     }
                 }
                 empresaDAO.actualizar(empresa, conn);
