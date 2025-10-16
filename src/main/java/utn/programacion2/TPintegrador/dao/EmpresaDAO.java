@@ -7,6 +7,7 @@ import utn.programacion2.TPintegrador.entities.Empresa;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class EmpresaDAO implements GenericDAO<Empresa> {
 
@@ -272,7 +273,8 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
                             " no existe en la base de datos"
             );
         }
-        if (null != buscarPorDomicilioFiscal(domicilioExistente.getId(), connection)) {
+        var empresaExistente = buscarPorDomicilioFiscal(domicilioExistente.getId(), connection);
+        if (null != empresaExistente && !(Objects.equals(empresaExistente.getId(), entity.getId()))) {
             throw new SQLException(
                     "El domicilio fiscal con ID " + entity.getDomicilioFiscal().getId() +
                             " ya está asignado a otra empresa"
