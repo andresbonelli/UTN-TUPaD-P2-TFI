@@ -108,7 +108,6 @@ public class DomicilioFiscal {
     public String toString() {
         return "DomicilioFiscal{" +
                 "id=" + id +
-                ", eliminado=" + eliminado +
                 ", calle='" + calle + '\'' +
                 ", numero=" + numero +
                 ", ciudad='" + ciudad + '\'' +

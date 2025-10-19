@@ -88,7 +88,6 @@ public class Empresa {
     public String toString() {
         return "Empresa{" +
                 "id=" + id +
-                ", eliminado=" + eliminado +
                 ", razonSocial='" + razonSocial + '\'' +
                 ", cuit='" + cuit + '\'' +
                 ", actividadPrincipal='" + actividadPrincipal + '\'' +
