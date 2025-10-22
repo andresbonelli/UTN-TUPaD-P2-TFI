@@ -35,6 +35,7 @@ public class EmpresaService extends AbstractService<Empresa> {
                 }
                 var creada = empresaDAO.crear(empresa, conn);
                 conn.commit();
+                System.out.println("Empresa creada exitosamente con ID: " + creada.getId());
                 return creada;
             } catch (Exception ex) {
                 conn.rollback();
@@ -61,11 +62,13 @@ public class EmpresaService extends AbstractService<Empresa> {
                     if (empresa.getDomicilioFiscal().getId() != null) {
                         domicilioFiscalService.actualizar(empresa.getDomicilioFiscal(), conn);
                     } else {
-                        domicilioFiscalService.insertar(empresa.getDomicilioFiscal(), conn);
+                        var nuevoDomicilio = domicilioFiscalService.insertar(empresa.getDomicilioFiscal(), conn);
+                        empresa.setDomicilioFiscal(nuevoDomicilio);
                     }
                 }
                 empresaDAO.actualizar(empresa, conn);
                 conn.commit();
+                System.out.println("Empresa actualizada exitosamente.");
                 return empresa;
             } catch (Exception ex) {
                 conn.rollback();
