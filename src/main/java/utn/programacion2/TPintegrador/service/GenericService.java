@@ -14,5 +14,4 @@ public interface GenericService<T> {
 
     List<T> getAll() throws Exception;
 
-
 }

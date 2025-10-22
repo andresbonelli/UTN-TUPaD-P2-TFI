@@ -23,6 +23,7 @@ public class DomicilioFiscalService extends AbstractService<DomicilioFiscal> {
             try {
                 DomicilioFiscal creada = insertar(domicilio, conn);
                 conn.commit();
+                System.out.println("Domicilio fiscal insertado exitosamente con ID: " + creada.getId());
                 return creada;
             } catch (Exception ex) {
                 conn.rollback();
@@ -73,6 +74,7 @@ public class DomicilioFiscalService extends AbstractService<DomicilioFiscal> {
     public DomicilioFiscal actualizar(DomicilioFiscal domicilio, Connection conn) throws SQLException {
         validarDatos(domicilio);
         domicilioFiscalDAO.actualizar(domicilio, conn);
+        System.out.println("Domicilio fiscal actualizado exitosamente.");
         return domicilio;
     }
 

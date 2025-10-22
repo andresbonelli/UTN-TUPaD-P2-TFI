@@ -35,6 +35,7 @@ public class EmpresaService extends AbstractService<Empresa> {
                 }
                 var creada = empresaDAO.crear(empresa, conn);
                 conn.commit();
+                System.out.println("Empresa creada exitosamente con ID: " + creada.getId());
                 return creada;
             } catch (Exception ex) {
                 conn.rollback();
@@ -67,6 +68,7 @@ public class EmpresaService extends AbstractService<Empresa> {
                 }
                 empresaDAO.actualizar(empresa, conn);
                 conn.commit();
+                System.out.println("Empresa actualizada exitosamente.");
                 return empresa;
             } catch (Exception ex) {
                 conn.rollback();
