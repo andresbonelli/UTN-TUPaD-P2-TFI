@@ -2,6 +2,7 @@ package utn.programacion2.TPintegrador.service;
 
 import utn.programacion2.TPintegrador.config.DatabaseConnection;
 import utn.programacion2.TPintegrador.dao.DomicilioFiscalDAO;
+import utn.programacion2.TPintegrador.dao.GenericDAO;
 import utn.programacion2.TPintegrador.entities.DomicilioFiscal;
 
 import java.sql.Connection;
@@ -9,11 +10,11 @@ import java.sql.SQLException;
 
 public class DomicilioFiscalService extends AbstractService<DomicilioFiscal> {
 
-    private final DomicilioFiscalDAO domicilioFiscalDAO;
+    private final GenericDAO<DomicilioFiscal> domicilioFiscalDAO;
 
-    public DomicilioFiscalService() {
-        super(new DomicilioFiscalDAO());
-        this.domicilioFiscalDAO = new DomicilioFiscalDAO();
+    public DomicilioFiscalService(DomicilioFiscalDAO dao) {
+        super(dao);
+        domicilioFiscalDAO = this.dao;
     }
 
     @Override

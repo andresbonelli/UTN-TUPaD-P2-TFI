@@ -16,10 +16,10 @@ public class EmpresaService extends AbstractService<Empresa> {
     private final EmpresaDAO empresaDAO;
     private final DomicilioFiscalService domicilioFiscalService;
 
-    public EmpresaService() {
-        super(new EmpresaDAO());
+    public EmpresaService(EmpresaDAO dao, DomicilioFiscalService domicilioFiscalService) {
+        super(dao);
         empresaDAO = (EmpresaDAO) this.dao;
-        domicilioFiscalService = new DomicilioFiscalService();
+        this.domicilioFiscalService = domicilioFiscalService;
     }
 
     @Override

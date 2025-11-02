@@ -13,6 +13,10 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
 
     private final DomicilioFiscalDAO domicilioFiscalDAO;
 
+    public EmpresaDAO(DomicilioFiscalDAO domicilioFiscalDAO) {
+        this.domicilioFiscalDAO = domicilioFiscalDAO;
+    }
+
     private static final String INSERT =
             "INSERT INTO empresa (eliminado, razon_social, cuit, actividad_principal, email, domicilio_fiscal_id) " +
                     "VALUES (?, ?, ?, ?, ?, ?)";
@@ -38,10 +42,6 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
 
     private static final String DELETE_LOGICAL =
             "UPDATE empresa SET eliminado = true WHERE id = ?";
-
-    public EmpresaDAO() {
-        this.domicilioFiscalDAO = new DomicilioFiscalDAO();
-    }
 
     @Override
     public Empresa crear(Empresa entity) throws SQLException {
