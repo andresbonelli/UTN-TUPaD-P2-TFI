@@ -464,6 +464,11 @@ public class AppMenu implements Runnable {
             System.out.println("ID inválido. Debes ingresar un número entero.");
             return;
         }
+        // Buscar si existe una empresa con ese domicilio fiscal
+        if(manager.getEmpresaService().existePorDomicilioFiscal(id)){
+            System.out.println("Operacion invalida. El domicilio pertenece a una empresa. Eliminar primero la Empresa asociada");
+            return;
+        }
         manager.getDomicilioFiscalService().eliminarLogico(id);
     }
 }
