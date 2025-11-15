@@ -295,7 +295,7 @@ public class AppMenu implements Runnable {
             System.out.println("ID inválido. Debes ingresar un número entero.");
             return;
         }
-        manager.getEmpresaService().eliminar(id);
+        manager.getEmpresaService().eliminarLogico(id);
     }
 
     // METODOS PARA GESTIÓN DE DOMICILIOS FISCALES
@@ -464,6 +464,6 @@ public class AppMenu implements Runnable {
             System.out.println("ID inválido. Debes ingresar un número entero.");
             return;
         }
-        manager.getDomicilioFiscalService().eliminar(id);
+        manager.getDomicilioFiscalService().eliminarLogico(id);
     }
 }

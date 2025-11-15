@@ -8,7 +8,7 @@ public interface GenericService<T> {
 
     T actualizar(T entity) throws Exception;
 
-    boolean eliminar(long id) throws Exception;
+    void eliminarLogico(long id) throws Exception;
 
     T getById(long id) throws Exception;
 
