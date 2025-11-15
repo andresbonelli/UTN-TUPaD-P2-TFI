@@ -53,6 +53,7 @@ public abstract class AbstractService<T> implements GenericService<T> {
             conn.setAutoCommit(false);
             boolean eliminado = dao.eliminar(id, conn);
             conn.commit();
+            System.out.println(clazz.getSimpleName() +" eliminado exitosamente.");
             return eliminado;
         } catch (SQLException e) {
             System.out.println("Error eliminando "+clazz.getSimpleName()+": " + e.getMessage());
