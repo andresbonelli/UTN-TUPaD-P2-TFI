@@ -443,12 +443,8 @@ public class AppMenu implements Runnable {
                     domicilio.setPais(nuevoPais);
                 }
             }
-            case 0 -> {
-                System.out.println("Actualización cancelada.");
-            }
-            default -> {
-                System.out.println("Opción no reconocida.");
-            }
+            case 0 -> System.out.println("Actualización cancelada.");
+            default -> System.out.println("Opción no reconocida.");
         }
         manager.getDomicilioFiscalService().actualizar(domicilio);
     }
