@@ -1,10 +1,13 @@
-package utn.programacion2.TPintegrador.main;
+package utn.programacion2.TPintegrador.service;
 
 import utn.programacion2.TPintegrador.dao.DomicilioFiscalDAO;
 import utn.programacion2.TPintegrador.dao.EmpresaDAO;
-import utn.programacion2.TPintegrador.service.DomicilioFiscalService;
-import utn.programacion2.TPintegrador.service.EmpresaService;
 
+/**
+ * Clase que inicializa los servicios y gestiona la inyeccion de dependencias.
+ * Funciona como 'singleton' (solo puede existir una unica instancia por ejecucion)
+ * Los servicios independientes solo pueden ser instanciados por el ServiceManager
+ */
 public class ServiceManager {
 
     private static ServiceManager INSTANCE;
@@ -13,7 +16,6 @@ public class ServiceManager {
     private final EmpresaService empresaService;
 
     private ServiceManager() {
-        // Inicialización de servicios con inyeccion de dependencias
         var domicilioFiscalDAO = new DomicilioFiscalDAO();
         var empresaDAO = new EmpresaDAO(domicilioFiscalDAO);
         this.domicilioFiscalService = new DomicilioFiscalService(domicilioFiscalDAO);
