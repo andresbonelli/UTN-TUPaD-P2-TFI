@@ -110,6 +110,16 @@ public class EmpresaService extends AbstractService<Empresa> {
         return List.of();
     }
 
+    public boolean existePorDomicilioFiscal(long id) {
+        try {
+            var empresa = empresaDAO.buscarPorDomicilioFiscal(id);
+            return empresa != null;
+        } catch (Exception e) {
+            System.out.println("Error al buscar empresa por domicilio fiscal ID: " + e.getMessage());
+        }
+        return false;
+    }
+
     private void validarDatos(Empresa e) {
         if (null == e)
             throw new IllegalArgumentException("La empresa no puede ser null");
@@ -126,4 +136,5 @@ public class EmpresaService extends AbstractService<Empresa> {
         if (null == e.getDomicilioFiscal())
             throw new IllegalArgumentException("Debe asociarse un domicilio fiscal");
     }
+
 }
