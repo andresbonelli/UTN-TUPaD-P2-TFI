@@ -17,7 +17,7 @@ public class AppMenu implements Runnable {
         this.running = true;
     }
 
-    public void ValidateCuit(String cuit) {
+    public String ValidateCuit(String cuit) {
         if (cuit.length() != 11) {
             System.out.println("CUIT inválido. Debe tener exactamente 11 dígitos numéricos.");
             while (cuit.length() != 11) {
@@ -25,6 +25,8 @@ public class AppMenu implements Runnable {
                 cuit = scanner.nextLine().trim();
             }
         }
+
+        return cuit;
     }
 
     @Override
@@ -89,14 +91,6 @@ public class AppMenu implements Runnable {
 
         System.out.print("CUIT (11 dígitos): ");
         String cuit = scanner.nextLine().trim();
-
-        // if (cuit.length() != 11) {
-        //     System.out.println("CUIT inválido. Debe tener exactamente 11 dígitos numéricos.");
-        //     while (cuit.length() != 11) {
-        //         System.out.print("Por favor, ingresa un CUIT válido (11 dígitos): ");
-        //         cuit = scanner.nextLine().trim();
-        //     }
-        // }
 
         ValidateCuit(cuit);
 
@@ -169,13 +163,7 @@ public class AppMenu implements Runnable {
         System.out.print("\nIngresa el CUIT de la empresa: ");
         String cuit = scanner.nextLine().trim();
 
-        if (cuit.length() != 11) {
-            System.out.println("CUIT inválido. Debe tener exactamente 11 dígitos numéricos.");
-            while (cuit.length() != 11) {
-                System.out.print("Por favor, ingresa un CUIT válido (11 dígitos): ");
-                cuit = scanner.nextLine().trim();
-            }
-        }
+        cuit = ValidateCuit(cuit);
 
         try {
             var empresa = manager.getEmpresaService().buscarPorCuit(cuit);
@@ -302,6 +290,7 @@ public class AppMenu implements Runnable {
         // Obtener el ID de la empresa a eliminar
         System.out.print("Ingresa el ID de la empresa a eliminar: ");
         String line = scanner.nextLine().trim();
+
         long id;
         try {
             id = Long.parseLong(line);
@@ -309,7 +298,21 @@ public class AppMenu implements Runnable {
             System.out.println("ID inválido. Debes ingresar un número entero.");
             return;
         }
-        manager.getEmpresaService().eliminarLogico(id);
+
+        try{
+            if(manager.getEmpresaService().getById(id) == null){
+                return;
+            }
+            else{
+                manager.getEmpresaService().eliminarLogico(id);
+                System.out.println("Empresa con ID '"+id+"' eliminada exitosamente.");
+            }
+        } catch(Exception e){
+            System.out.println("Error al buscar la empresa: " + e.getMessage());
+            return;
+        }
+
+        
     }
 
     // METODOS PARA GESTIÓN DE DOMICILIOS FISCALES
