@@ -23,14 +23,15 @@ public class AppMenu implements Runnable {
             System.out.println("\n=== MENÚ PRINCIPAL ===");
             System.out.println("1. Crear Empresa");
             System.out.println("2. Leer empresa por Id");
-            System.out.println("3. Listar todas las empresas");
-            System.out.println("4. Actulizar empresa");
-            System.out.println("5. Eliminar empresa");
-            System.out.println("6. Crear Domicilio Fiscal");
-            System.out.println("7. Leer domicilio fiscal por Id");
-            System.out.println("8. Listar todos los domicilios fiscales");
-            System.out.println("9. Actualizar domicilio fiscal");
-            System.out.println("10. Eliminar domicilio fiscal");
+            System.out.println("3. Leer empresa por CUIT");
+            System.out.println("4. Listar todas las empresas");
+            System.out.println("5. Actualizar empresa");
+            System.out.println("6. Eliminar empresa");
+            System.out.println("7. Crear Domicilio Fiscal");    
+            System.out.println("8. Leer domicilio fiscal por Id");
+            System.out.println("9. Listar todos los domicilios fiscales");
+            System.out.println("10. Actualizar domicilio fiscal");
+            System.out.println("11. Eliminar domicilio fiscal");
             System.out.println("0. Salir");
             System.out.print("Selecciona una opción: ");
 
@@ -45,16 +46,17 @@ public class AppMenu implements Runnable {
             }
 
             switch (opcion) {
-                case 1 -> crearEmpresa();
+                case 1 -> crearEmpresa(); // ver. cuit 11 dig.
                 case 2 -> leerEmpresaPorId();
-                case 3 -> listarEmpresas();
-                case 4 -> actualizarEmpresa();
-                case 5 -> eliminarEmpresa();
-                case 6 -> crearDomicilioFiscal();
-                case 7 -> leerDomicilioFiscalPorId();
-                case 8 -> listarDomiciliosFiscales();
-                case 9 -> actualizarDomicilioFiscal();
-                case 10 -> eliminarDomicilioFiscal();
+                case 3 -> leerEmpresaPorCuit();
+                case 4 -> listarEmpresas();
+                case 5 -> actualizarEmpresa();
+                case 6 -> eliminarEmpresa();
+                case 7 -> crearDomicilioFiscal();
+                case 8 -> leerDomicilioFiscalPorId();
+                case 9 -> listarDomiciliosFiscales();
+                case 10 -> actualizarDomicilioFiscal();
+                case 11 -> eliminarDomicilioFiscal();
                 case 0 -> {
                     System.out.println("\nPrograma finalizado.");
                     running = false;
