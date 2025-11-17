@@ -36,16 +36,16 @@ public class AppMenu implements Runnable {
             System.out.println("\n=== MENÚ PRINCIPAL ===");
             System.out.println("1. Crear Empresa");
             System.out.println("2. Leer empresa por Id");
-            System.out.println("3. Listar todas las empresas");
-            System.out.println("4. Actulizar empresa");
-            System.out.println("5. Eliminar empresa");
-            System.out.println("6. Crear Domicilio Fiscal");
-            System.out.println("7. Leer domicilio fiscal por Id");
-            System.out.println("8. Listar todos los domicilios fiscales");
-            System.out.println("9. Actualizar domicilio fiscal");
-            System.out.println("10. Eliminar domicilio fiscal");
-            System.out.println("11. Leer empresa por CUIT");
-            System.out.println("12. Buscar empresa por razón social");
+            System.out.println("3. Leer empresa por CUIT");
+            System.out.println("4. Buscar empresa por razon social");
+            System.out.println("5. Listar empresas");
+            System.out.println("6. Actualizar empresas");
+            System.out.println("7. Eliminar empresa");
+            System.out.println("8. Crear Domicilio Fiscal");
+            System.out.println("9. Leer domicilio fiscal por Id");
+            System.out.println("10. Listar todos los domicilios fiscales");
+            System.out.println("11. Actualizar domicilio fiscal");
+            System.out.println("12. Eliminar domicilio fiscal");  
             System.out.println("0. Salir");
             System.out.print("Selecciona una opción: ");
 
@@ -93,7 +93,7 @@ public class AppMenu implements Runnable {
         System.out.print("CUIT (11 dígitos): ");
         String cuit = scanner.nextLine().trim();
 
-        ValidateCuit(cuit);
+        cuit = ValidateCuit(cuit);
 
         System.out.print("Email: ");
         String email = scanner.nextLine().trim();
@@ -323,22 +323,22 @@ public class AppMenu implements Runnable {
         // implementar
         System.out.println("\n--- Crear Nuevo Domicilio Fiscal ---");
 
-        System.out.println("Pais:");
+        System.out.println("Pais: ");
         String pais = scanner.nextLine().trim();
 
-        System.out.println("Ciudad:");
+        System.out.println("Ciudad: ");
         String ciudad = scanner.nextLine().trim();
 
-        System.out.println("Provincia:");
+        System.out.println("Provincia: ");
         String provincia = scanner.nextLine().trim();
 
-        System.out.println("Calle:");
+        System.out.println("Calle: ");
         String calle = scanner.nextLine().trim();
 
-        System.out.println("Número:");
+        System.out.println("Número: ");
         String numero = scanner.nextLine().trim();
 
-        System.out.println("Código Postal:");
+        System.out.println("Código Postal: ");
         String codigoPostal = scanner.nextLine().trim();
 
         // Crear objeto domicilio
