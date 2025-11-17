@@ -12,11 +12,13 @@ public class EmpresaService extends AbstractService<Empresa> {
 
     private static final Pattern EMAIL_REGEX =
             Pattern.compile("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$");
+    private static final Pattern CUIT_REGEX =
+            Pattern.compile("^\\d{11}$");
 
     private final EmpresaDAO empresaDAO;
     private final DomicilioFiscalService domicilioFiscalService;
 
-    public EmpresaService(EmpresaDAO dao, DomicilioFiscalService domicilioFiscalService) {
+    protected EmpresaService(EmpresaDAO dao, DomicilioFiscalService domicilioFiscalService) {
         super(dao);
         empresaDAO = (EmpresaDAO) this.dao;
         this.domicilioFiscalService = domicilioFiscalService;
@@ -129,6 +131,9 @@ public class EmpresaService extends AbstractService<Empresa> {
 
         if (null == e.getCuit() || e.getCuit().isBlank())
             throw new IllegalArgumentException("El CUIT es obligatorio");
+
+        if (null != e.getCuit() && !CUIT_REGEX.matcher(e.getCuit()).matches())
+            throw new IllegalArgumentException("El formato de CUIT es inválido");
 
         if (null != e.getEmail() && !EMAIL_REGEX.matcher(e.getEmail()).matches())
             throw new IllegalArgumentException("El formato de email es inválido");

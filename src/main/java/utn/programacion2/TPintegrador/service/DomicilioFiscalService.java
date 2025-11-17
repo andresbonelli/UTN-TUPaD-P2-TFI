@@ -12,7 +12,7 @@ public class DomicilioFiscalService extends AbstractService<DomicilioFiscal> {
 
     private final GenericDAO<DomicilioFiscal> domicilioFiscalDAO;
 
-    public DomicilioFiscalService(DomicilioFiscalDAO dao) {
+    protected DomicilioFiscalService(DomicilioFiscalDAO dao) {
         super(dao);
         domicilioFiscalDAO = this.dao;
     }
