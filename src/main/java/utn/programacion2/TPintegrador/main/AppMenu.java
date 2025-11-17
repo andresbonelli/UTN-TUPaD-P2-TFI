@@ -19,12 +19,12 @@ public class AppMenu implements Runnable {
     }
 
     public String ValidateCuit(String cuit) {
-        if (cuit.length() != 11) {
+        cuit = cuit.trim().replaceAll("[^0-9]", "");
+
+        while (cuit.length() != 11) {
             System.out.println("CUIT inválido. Debe tener exactamente 11 dígitos numéricos.");
-            while (cuit.length() != 11) {
-                System.out.print("Por favor, ingresa un CUIT válido (11 dígitos): ");
-                cuit = scanner.nextLine().trim();
-            }
+            System.out.print("Ingresá un CUIT válido (solo números): ");
+            cuit = scanner.nextLine().trim().replaceAll("[^0-9]", "");
         }
 
         return cuit;
