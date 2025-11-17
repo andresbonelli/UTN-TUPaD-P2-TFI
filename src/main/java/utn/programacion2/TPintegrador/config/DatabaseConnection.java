@@ -8,14 +8,23 @@ import java.sql.SQLException;
  * Clase de configuración para la conexión a la base de datos MySQL
  */
 public class DatabaseConnection {
-    private static final String URL = System.getProperty("db.url", "jdbc:mysql://localhost:3306/UTN_integradorProg2");
-    private static final String USER = System.getProperty("db.user", "root");
-    private static final String PASSWORD = System.getProperty("db.password", "");
+    private static final String URL = System.getenv("DB_URL") != null
+            ? System.getenv("DB_URL")
+            : System.getProperty("db.url", "jdbc:mysql://localhost:3306/UTN_integradorProg2");
+
+    private static final String USER = System.getenv("MYSQL_USER") != null
+            ? System.getenv("MYSQL_USER")
+            : System.getProperty("db.user", "root");
+
+    private static final String PASSWORD = System.getenv("MYSQL_PASSWORD") != null
+            ? System.getenv("MYSQL_PASSWORD")
+            : System.getProperty("db.password", "");
     private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
 
     static {
         try {
             Class.forName(DRIVER);
+            System.out.println("USUARIO MYSQL: "+System.getenv("MYSQL_USER"));
             // Validar configuración tempranamente (fail-fast)
             validarConfig();
         } catch (ClassNotFoundException e) {
