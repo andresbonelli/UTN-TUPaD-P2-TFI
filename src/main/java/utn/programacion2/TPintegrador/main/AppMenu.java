@@ -18,22 +18,34 @@ public class AppMenu implements Runnable {
         this.running = true;
     }
 
+    public String ValidateCuit(String cuit) {
+        cuit = cuit.trim().replaceAll("[^0-9]", "");
+
+        while (cuit.length() != 11) {
+            System.out.println("CUIT inválido. Debe tener exactamente 11 dígitos numéricos.");
+            System.out.print("Ingresá un CUIT válido (solo números): ");
+            cuit = scanner.nextLine().trim().replaceAll("[^0-9]", "");
+        }
+
+        return cuit;
+    }
+
     @Override
     public void run() {
         while (running) {
             System.out.println("\n=== MENÚ PRINCIPAL ===");
             System.out.println("1. Crear Empresa");
             System.out.println("2. Leer empresa por Id");
-            System.out.println("3. Listar todas las empresas");
-            System.out.println("4. Actulizar empresa");
-            System.out.println("5. Eliminar empresa");
-            System.out.println("6. Crear Domicilio Fiscal");
-            System.out.println("7. Leer domicilio fiscal por Id");
-            System.out.println("8. Listar todos los domicilios fiscales");
-            System.out.println("9. Actualizar domicilio fiscal");
-            System.out.println("10. Eliminar domicilio fiscal");
-            System.out.println("11. Leer empresa por CUIT");
-            System.out.println("12. Buscar empresa por razón social");
+            System.out.println("3. Leer empresa por CUIT");
+            System.out.println("4. Buscar empresa por razon social");
+            System.out.println("5. Listar empresas");
+            System.out.println("6. Actualizar empresas");
+            System.out.println("7. Eliminar empresa");
+            System.out.println("8. Crear Domicilio Fiscal");
+            System.out.println("9. Leer domicilio fiscal por Id");
+            System.out.println("10. Listar todos los domicilios fiscales");
+            System.out.println("11. Actualizar domicilio fiscal");
+            System.out.println("12. Eliminar domicilio fiscal");  
             System.out.println("0. Salir");
             System.out.print("Selecciona una opción: ");
 
@@ -48,18 +60,18 @@ public class AppMenu implements Runnable {
             }
 
             switch (opcion) {
-                case 1 -> crearEmpresa();
+                case 1 -> crearEmpresa(); // ver. cuit 11 dig.
                 case 2 -> leerEmpresaPorId();
-                case 3 -> listarEmpresas();
-                case 4 -> actualizarEmpresa();
-                case 5 -> eliminarEmpresa();
-                case 6 -> crearDomicilioFiscal();
-                case 7 -> leerDomicilioFiscalPorId();
-                case 8 -> listarDomiciliosFiscales();
-                case 9 -> actualizarDomicilioFiscal();
-                case 10 -> eliminarDomicilioFiscal();
-                case 11 -> leerEmpresaPorCuit();
-                case 12 -> buscarEmpresaPorRazonSocial();
+                case 3 -> leerEmpresaPorCuit();
+                case 4 -> buscarEmpresaPorRazonSocial();
+                case 5 -> listarEmpresas();
+                case 6 -> actualizarEmpresa();
+                case 7 -> eliminarEmpresa();
+                case 8 -> crearDomicilioFiscal();
+                case 9 -> leerDomicilioFiscalPorId();
+                case 10 -> listarDomiciliosFiscales();
+                case 11 -> actualizarDomicilioFiscal();
+                case 12 -> eliminarDomicilioFiscal();
                 case 0 -> {
                     System.out.println("\nPrograma finalizado.");
                     running = false;
@@ -68,20 +80,6 @@ public class AppMenu implements Runnable {
             }
         }
         scanner.close();
-    }
-
-    private void buscarEmpresaPorRazonSocial() {
-        System.out.print("\nIngresa la razón social de la empresa: ");
-        String razonSocial = scanner.nextLine().trim();
-
-        var empresas = manager.getEmpresaService().buscarPorRazonSocial(razonSocial);
-
-        if (!empresas.isEmpty()) {
-            System.out.println("\nEmpresas encontradas:");
-            for (Empresa empresa : empresas) {
-                System.out.println(empresa);
-            }
-        }
     }
 
     // METODOS PARA GESTIÓN DE EMPRESAS
@@ -95,13 +93,7 @@ public class AppMenu implements Runnable {
         System.out.print("CUIT (11 dígitos): ");
         String cuit = scanner.nextLine().trim();
 
-        if (cuit.length() != 11) {
-            System.out.println("CUIT inválido. Debe tener exactamente 11 dígitos numéricos.");
-            while (cuit.length() != 11) {
-                System.out.print("Por favor, ingresa un CUIT válido (11 dígitos): ");
-                cuit = scanner.nextLine().trim();
-            }
-        }
+        cuit = ValidateCuit(cuit);
 
         System.out.print("Email: ");
         String email = scanner.nextLine().trim();
@@ -172,13 +164,7 @@ public class AppMenu implements Runnable {
         System.out.print("\nIngresa el CUIT de la empresa: ");
         String cuit = scanner.nextLine().trim();
 
-        if (cuit.length() != 11) {
-            System.out.println("CUIT inválido. Debe tener exactamente 11 dígitos numéricos.");
-            while (cuit.length() != 11) {
-                System.out.print("Por favor, ingresa un CUIT válido (11 dígitos): ");
-                cuit = scanner.nextLine().trim();
-            }
-        }
+        cuit = ValidateCuit(cuit);
 
         try {
             var empresa = manager.getEmpresaService().buscarPorCuit(cuit);
@@ -187,6 +173,20 @@ public class AppMenu implements Runnable {
             }
         } catch (Exception e) {
             System.out.println("Error al buscar la empresa: " + e.getMessage());
+        }
+    }
+
+    private void buscarEmpresaPorRazonSocial() {
+        System.out.print("\nIngresa la razón social de la empresa: ");
+        String razonSocial = scanner.nextLine().trim();
+
+        var empresas = manager.getEmpresaService().buscarPorRazonSocial(razonSocial);
+
+        if (!empresas.isEmpty()) {
+            System.out.println("\nEmpresas encontradas:");
+            for (Empresa empresa : empresas) {
+                System.out.println(empresa);
+            }
         }
     }
 
@@ -254,6 +254,8 @@ public class AppMenu implements Runnable {
                 if (!nuevoCuit.isEmpty()) {
                     empresa.setCuit(nuevoCuit);
                 }
+
+                ValidateCuit(nuevoCuit);
             }
             case 3 -> {
                 System.out.print("Nuevo email (actual: " + empresa.getEmail() + "): ");
@@ -289,6 +291,7 @@ public class AppMenu implements Runnable {
         // Obtener el ID de la empresa a eliminar
         System.out.print("Ingresa el ID de la empresa a eliminar: ");
         String line = scanner.nextLine().trim();
+
         long id;
         try {
             id = Long.parseLong(line);
@@ -296,7 +299,21 @@ public class AppMenu implements Runnable {
             System.out.println("ID inválido. Debes ingresar un número entero.");
             return;
         }
-        manager.getEmpresaService().eliminarLogico(id);
+
+        try{
+            if(manager.getEmpresaService().getById(id) == null){
+                return;
+            }
+            else{
+                manager.getEmpresaService().eliminarLogico(id);
+                System.out.println("Empresa con ID '"+id+"' eliminada exitosamente.");
+            }
+        } catch(Exception e){
+            System.out.println("Error al buscar la empresa: " + e.getMessage());
+            return;
+        }
+
+        
     }
 
     // METODOS PARA GESTIÓN DE DOMICILIOS FISCALES
@@ -306,22 +323,22 @@ public class AppMenu implements Runnable {
         // implementar
         System.out.println("\n--- Crear Nuevo Domicilio Fiscal ---");
 
-        System.out.println("Pais:");
+        System.out.println("Pais: ");
         String pais = scanner.nextLine().trim();
 
-        System.out.println("Ciudad:");
+        System.out.println("Ciudad: ");
         String ciudad = scanner.nextLine().trim();
 
-        System.out.println("Provincia:");
+        System.out.println("Provincia: ");
         String provincia = scanner.nextLine().trim();
 
-        System.out.println("Calle:");
+        System.out.println("Calle: ");
         String calle = scanner.nextLine().trim();
 
-        System.out.println("Número:");
+        System.out.println("Número: ");
         String numero = scanner.nextLine().trim();
 
-        System.out.println("Código Postal:");
+        System.out.println("Código Postal: ");
         String codigoPostal = scanner.nextLine().trim();
 
         // Crear objeto domicilio
@@ -353,10 +370,10 @@ public class AppMenu implements Runnable {
     // listar todos
     private void listarDomiciliosFiscales() {
         System.out.println("\n--- Lista de Domicilios Fiscales ---");
-            var domicilios = manager.getDomicilioFiscalService().getAll();
-            if (!domicilios.isEmpty()) {
-                domicilios.forEach(d -> System.out.println("\n" + d));
-            }
+        var domicilios = manager.getDomicilioFiscalService().getAll();
+        if (!domicilios.isEmpty()) {
+            domicilios.forEach(d -> System.out.println("\n" + d));
+        }
 
     }
 
@@ -401,7 +418,7 @@ public class AppMenu implements Runnable {
             return;
         }
 
-        switch(opcion) {
+        switch (opcion) {
             case 1 -> {
                 System.out.print("Nueva calle (actual: " + domicilio.getCalle() + "): ");
                 String nuevaCalle = scanner.nextLine().trim();
@@ -466,8 +483,9 @@ public class AppMenu implements Runnable {
             return;
         }
         // Buscar si existe una empresa con ese domicilio fiscal
-        if(manager.getEmpresaService().existePorDomicilioFiscal(id)){
-            System.out.println("Operacion invalida. El domicilio pertenece a una empresa. Eliminar primero la Empresa asociada");
+        if (manager.getEmpresaService().existePorDomicilioFiscal(id)) {
+            System.out.println(
+                    "Operacion invalida. El domicilio pertenece a una empresa. Eliminar primero la Empresa asociada");
             return;
         }
         manager.getDomicilioFiscalService().eliminarLogico(id);

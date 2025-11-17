@@ -52,6 +52,10 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
 
     @Override
     public Empresa crear(Empresa entity, Connection connection) throws SQLException {
+        if (entity.getDomicilioFiscal() == null) {
+            throw new IllegalArgumentException("La empresa debe tener un domicilio fiscal asociado");
+        }
+
         if (null == entity) {
             throw new IllegalArgumentException("La entidad no puede ser null");
         }
@@ -252,9 +256,9 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
         e.setActividadPrincipal(rs.getString("actividad_principal"));
         e.setEmail(rs.getString("email"));
 
-        // Cargar el domicilio fiscal asociado
-        long domicilioFiscalId = rs.getLong("domicilio_fiscal_id");
-        if (!rs.wasNull()) {
+       // Cargar domicilio fiscal si existe
+        Long domicilioFiscalId = rs.getObject("domicilio_fiscal_id", Long.class);
+        if (domicilioFiscalId != null) {
             DomicilioFiscal domicilio = domicilioFiscalDAO.leer(domicilioFiscalId, connection);
             e.setDomicilioFiscal(domicilio);
         }
