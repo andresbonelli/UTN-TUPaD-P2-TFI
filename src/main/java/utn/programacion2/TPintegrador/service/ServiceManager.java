@@ -1,7 +1,6 @@
 package utn.programacion2.TPintegrador.service;
 
-import utn.programacion2.TPintegrador.dao.DomicilioFiscalDAO;
-import utn.programacion2.TPintegrador.dao.EmpresaDAO;
+import utn.programacion2.TPintegrador.dao.DAOManager;
 
 /**
  * Clase que inicializa los servicios y gestiona la inyeccion de dependencias.
@@ -16,10 +15,9 @@ public class ServiceManager {
     private final EmpresaService empresaService;
 
     private ServiceManager() {
-        var domicilioFiscalDAO = new DomicilioFiscalDAO();
-        var empresaDAO = new EmpresaDAO(domicilioFiscalDAO);
-        this.domicilioFiscalService = new DomicilioFiscalService(domicilioFiscalDAO);
-        this.empresaService = new EmpresaService(empresaDAO, domicilioFiscalService);
+        DAOManager daoManager = DAOManager.getInstance();
+        this.domicilioFiscalService = new DomicilioFiscalService(daoManager.getDomicilioFiscalDAO());
+        this.empresaService = new EmpresaService(daoManager.getEmpresaDAO(), domicilioFiscalService);
     }
 
     public static ServiceManager getInstance() {
