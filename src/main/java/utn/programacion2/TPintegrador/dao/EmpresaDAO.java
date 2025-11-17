@@ -52,6 +52,10 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
 
     @Override
     public Empresa crear(Empresa entity, Connection connection) throws SQLException {
+        if (entity.getDomicilioFiscal() == null) {
+            throw new IllegalArgumentException("La empresa debe tener un domicilio fiscal asociado");
+        }
+
         if (null == entity) {
             throw new IllegalArgumentException("La entidad no puede ser null");
         }
