@@ -26,6 +26,8 @@ public class DomicilioFiscalDAO implements GenericDAO<DomicilioFiscal> {
     private static final String DELETE_LOGICAL =
             "UPDATE domicilio_fiscal SET eliminado = true WHERE id = ?";
 
+    DomicilioFiscalDAO() {}
+
     @Override
     public DomicilioFiscal crear(DomicilioFiscal entity) throws SQLException {
         try (Connection conn = DatabaseConnection.conectarDB()) {

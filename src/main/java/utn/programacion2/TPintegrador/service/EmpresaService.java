@@ -21,8 +21,7 @@ public class EmpresaService extends AbstractService<Empresa> {
     private final EmpresaDAO empresaDAO;
     private final DomicilioFiscalService domicilioFiscalService;
 
-    protected EmpresaService(EmpresaDAO dao,
-                             DomicilioFiscalService domicilioFiscalService) {
+    EmpresaService(EmpresaDAO dao, DomicilioFiscalService domicilioFiscalService) {
         super(dao);
         this.empresaDAO = (EmpresaDAO) this.dao;
         this.domicilioFiscalService = domicilioFiscalService;

@@ -13,7 +13,7 @@ public class EmpresaDAO implements GenericDAO<Empresa> {
 
     private final DomicilioFiscalDAO domicilioFiscalDAO;
 
-    public EmpresaDAO(DomicilioFiscalDAO domicilioFiscalDAO) {
+    EmpresaDAO(DomicilioFiscalDAO domicilioFiscalDAO) {
         this.domicilioFiscalDAO = domicilioFiscalDAO;
     }
 
