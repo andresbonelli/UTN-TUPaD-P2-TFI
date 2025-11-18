@@ -24,7 +24,6 @@ public class DatabaseConnection {
     static {
         try {
             Class.forName(DRIVER);
-            System.out.println("USUARIO MYSQL: "+System.getenv("MYSQL_USER"));
             // Validar configuración tempranamente (fail-fast)
             validarConfig();
         } catch (ClassNotFoundException e) {
