@@ -5,6 +5,12 @@ Proyecto educativo correspondiente al Trabajo Final Integrador de la materia Pro
 
 ---
 
+## Link al video
+
+- https://www.youtube.com/watch?v=27YGGctUmhI
+
+---
+  
 ## Resumen
 
 - Lenguaje: Java 21
